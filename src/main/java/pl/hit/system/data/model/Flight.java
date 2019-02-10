@@ -17,16 +17,16 @@ public class Flight {
     @Column(name = "departure_time", nullable = false)
     private Timestamp departureTime;
 
-    @Column(name = "arrival_time", nullable = false)
-    private Timestamp arrival_time;
+    @Column(name = "arrival_Time", nullable = false)
+    private Timestamp arrivalTime;
 
     @Column(name = "amount_of_seats", nullable = false)
     Integer amountOfSeats;
 
     @ManyToMany
-    @JoinTable(name = "flight_tourist",
+    @JoinTable(name = "tourist_flights",
             joinColumns = @JoinColumn(name = "Flight_ID"),
-            inverseJoinColumns =@JoinColumn(name = "Tourist_ID"))
+            inverseJoinColumns = @JoinColumn(name = "Tourist_ID"))
     List<Tourist> touristList = new ArrayList<>();
 
     @Column(name = "ticket_price", nullable = false)
@@ -51,12 +51,12 @@ public class Flight {
         this.departureTime = departureTime;
     }
 
-    public Timestamp getArrival_time() {
-        return arrival_time;
+    public Timestamp getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrival_time(Timestamp arrival_time) {
-        this.arrival_time = arrival_time;
+    public void setArrivalTime(Timestamp arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public Integer getAmountOfSeats() {
@@ -75,6 +75,13 @@ public class Flight {
         this.ticketPrice = ticketPrice;
     }
 
+    public List<Tourist> getTouristList() {
+        return touristList;
+    }
+
+    public void setTouristList(List<Tourist> touristList) {
+        this.touristList = touristList;
+    }
 
     @Override
     public boolean equals(Object o) {

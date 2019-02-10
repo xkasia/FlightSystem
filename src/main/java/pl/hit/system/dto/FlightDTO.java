@@ -13,11 +13,9 @@ public class FlightDTO {
 
     private Timestamp departureTime;
 
-    private Timestamp arrival_time;
-
+    private Timestamp arrivalTime;
 
     Integer amountOfSeats;
-
 
     List<Tourist> touristList = new ArrayList<>();
 
@@ -50,12 +48,12 @@ public class FlightDTO {
         this.departureTime = departureTime;
     }
 
-    public Timestamp getArrival_time() {
-        return arrival_time;
+    public Timestamp getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrival_time(Timestamp arrival_time) {
-        this.arrival_time = arrival_time;
+    public void setArrivalTime(Timestamp arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public Integer getAmountOfSeats() {

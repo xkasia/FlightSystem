@@ -1,7 +1,7 @@
 package pl.hit.system.data.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,14 +23,69 @@ public class Tourist {
     @Column(nullable = false, length = 100, columnDefinition = "VARCHAR")
     private String country;
 
-    @OneToMany(mappedBy = "tourist")
-    private List<Note> notes = new ArrayList<>();
+    private String note;
 
     @Column(name = "birth_date", nullable = false)
-    private Timestamp birthDate;
+    private LocalDate birthDate;
 
     @ManyToMany(mappedBy = "touristList")
     private List<Flight> flightsList = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public List<Flight> getFlightsList() {
+        return flightsList;
+    }
+
+    public void setFlightsList(List<Flight> flightsList) {
+        this.flightsList = flightsList;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -45,8 +100,6 @@ public class Tourist {
 
         return Objects.hash(id);
     }
-
-
 
 
 }
