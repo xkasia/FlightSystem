@@ -17,7 +17,7 @@
 
 <div class="container">
 
-    <div class="row center"><h2>Flight data:</h2>
+    <div class="row center"><h4>Flight data:</h4>
         Departure time: ${flight.departureTime}</br>
         Arrival time: ${flight.arrivalTime}</br>
         Amount of places: ${flight.amountOfSeats}</br>
@@ -51,7 +51,6 @@
             </tbody>
         </table>
         <br/>
-
         <c:choose>
             <c:when test = "${hasFreePlace == true}">
                 <a href="/flight/tourist/all">Add new tourist.</a>
@@ -60,6 +59,8 @@
                 <td>Flight is full.</td>
             </c:otherwise>
         </c:choose>
+        <h6 style="color:limegreen;">${deleteTouristFromFlightSuccessMsg}</h6>
+        <h6 style="color:limegreen;">${addTouristToFlightSuccessMsg}</h6>
     </div>
 </div>
 </body>

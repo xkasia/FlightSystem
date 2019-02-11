@@ -17,7 +17,7 @@
 
 <div class="container">
 
-    <div class="row center"><h2>Tourist data:</h2>
+    <div class="row center"><h4>Tourist data:</h4>
         First name: ${tourist.firstName}</br>
         Last Name: ${tourist.lastName}</br>
         Country: ${tourist.country}</br>

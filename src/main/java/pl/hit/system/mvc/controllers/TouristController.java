@@ -45,12 +45,12 @@ public class TouristController {
 
     @PostMapping("/add")
     public String addUser(@Valid @ModelAttribute("tourist") TouristAddForm touristAddForm,
-                          BindingResult bindingResult, String birthDate, Model model) {
+                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "/tourist/add";
         }
         TouristDTO tourist = new TouristDTO(touristAddForm.getFirstName(), touristAddForm.getLastName(), touristAddForm.getCountry(),
-                touristAddForm.getNote(), LocalDate.parse(birthDate));
+                touristAddForm.getNote(), LocalDate.parse(touristAddForm.getBirthDate()));
         touristService.saveTourist(tourist);
 
         List<TouristDTO> tourists = touristService.getAllTourists();

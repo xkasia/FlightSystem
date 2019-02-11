@@ -9,13 +9,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Show Users</title>
+    <title>Show Tourists</title>
     <jsp:include page="../elements/header.jsp"/>
 </head>
 <body>
 <jsp:include page="../elements/menu.jsp"/>
 <div class="container">
-    <div class="row center"><h2>All Tourists</h2>
+    <div class="row center"><h4>All Tourists</h4>
         <table>
             <thead>
             <tr>
@@ -34,13 +34,15 @@
                     <td>${tourist.lastName}</td>
                     <td>${tourist.country}</td>
                     <td>${tourist.birthDate}</td>
-                        <td><a href="/tourist/manage/${tourist.id}">More.</a></td>
+                    <td><a class="waves-effect waves-light btn-small"  href="/tourist/manage/${tourist.id}">More</a></td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
         </br>
-        <td><a href="/tourist/add">Add new tourist.</a>
+
+        <td><a href="/tourist/add"><button class = "btn waves-effect waves-teal">
+            <i class = "material-icons left">add</i>Add</button></a></td>
             <h6 style="color:limegreen;">${addTouristSuccessMsg}</h6>
             <h6 style="color:limegreen;">${deleteTouristSuccessMsg}</h6>
     </div>

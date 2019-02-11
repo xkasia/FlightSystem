@@ -5,14 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.hit.system.core.forms.FlightAddForm;
-import pl.hit.system.core.forms.TouristAddForm;
 import pl.hit.system.core.services.FlightService;
 import pl.hit.system.core.services.TouristService;
 import pl.hit.system.dto.FlightDTO;
 import pl.hit.system.dto.TouristDTO;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +33,6 @@ public class FlightController {
     @GetMapping("/show")
     public String showTourists(Model model) {
         List<FlightDTO> flights = flightService.getAllFlights();
-
         model.addAttribute("flights", flights);
         return "/flight/show";
     }
@@ -47,23 +44,33 @@ public class FlightController {
     }
 
     @PostMapping("/add")
-    public String addUser(@Valid @ModelAttribute("tourist") FlightAddForm flightAddForm,
-                          BindingResult bindingResult, String departureTime, String arrivalTime, Model model) {
+    public String addFlight(@Valid @ModelAttribute("flight") FlightAddForm flightAddForm,
+                            BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "/tourist/add";
+            return "flight/add";
         }
+
+        if(LocalDateTime.parse(flightAddForm.getDepartureTime()).compareTo(LocalDateTime.parse(flightAddForm.getArrivalTime()))>0){
+            model.addAttribute("wrongDataMsg", "Arrival time can not be before departure time. Please provide proper data.");
+            return  "flight/add";
+        }
+
         FlightDTO flightDTO = new FlightDTO();
-        flightDTO.setDepartureTime(LocalDateTime.parse(departureTime));
-        flightDTO.setArrivalTime(LocalDateTime.parse(arrivalTime));
+        flightDTO.setDepartureTime(LocalDateTime.parse(flightAddForm.getDepartureTime()));
+        flightDTO.setArrivalTime(LocalDateTime.parse(flightAddForm.getArrivalTime()));
         flightDTO.setAmountOfSeats(flightAddForm.getAmountOfSeats());
         flightDTO.setTicketPrice(flightAddForm.getTicketPrice());
         flightService.saveFlight(flightDTO);
 
-        return "redirect:/flight/show";
+        List<FlightDTO> flights = flightService.getAllFlights();
+        model.addAttribute("flights", flights);
+        model.addAttribute("addFlightSuccessMsg", "Flight was added successfully.");
+
+        return "flight/show";
     }
 
     @GetMapping("/manage/{flightId:[0-9]+}")
-    public String manageTourist(@PathVariable Long flightId, Model model) {
+    public String manageFlight(@PathVariable Long flightId, Model model) {
         this.flightId = flightId;
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
@@ -84,28 +91,36 @@ public class FlightController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser(String delete) {
+    public String deleteFlight(String delete, Model model) {
 
         if (delete.equals("yes")) {
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             flightService.deleteFlight(flightDTO);
-            return "redirect:/flight/show";
+
+            List<FlightDTO> flights = flightService.getAllFlights();
+            model.addAttribute("flights", flights);
+            model.addAttribute("deleteFlightSuccessMsg", "Flight was deleted successfully.");
+            return "flight/show";
         }
         return "redirect:/flight/manage/" + flightId;
     }
 
     @GetMapping("/tourist/delete/{touristId:[0-9]+}")
-    public String showDeleteFlightPage(@PathVariable Long touristId) {
+    public String showDeleteTouristFromFlightPage(@PathVariable Long touristId) {
         this.touristId = touristId;
         return "flight/tourist/delete";
     }
 
     @PostMapping("/tourist/delete")
-    public String deleteFlight(String delete) {
+    public String deleteTouristFromFlight(String delete, Model model) {
         if (delete.equals("yes")) {
             TouristDTO touristDTO = touristService.getTouristByID(touristId);
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             touristService.deleteFlight(touristDTO, flightDTO);
+
+            model.addAttribute("flight", flightDTO);
+            model.addAttribute("deleteTouristFromFlightSuccessMsg", "Flight was deleted successfully.");
+            return "flight/manage";
         }
         return "redirect:/flight/manage/" + touristId;
     }
@@ -119,7 +134,6 @@ public class FlightController {
         Map<Long, Boolean> isAlreadyBookedMap = new HashMap<>();
 
         for (int i = 0; i < touristList.size(); i++) {
-
             // check if already booked
             boolean isAlreadyBooked = touristService.checkIfTouristBookedFlight(flightDTO.getId(), touristList.get(i).getId());
             if (isAlreadyBooked) {
@@ -136,7 +150,7 @@ public class FlightController {
 
 
     @GetMapping("/tourist/add/{touristId:[0-9]+}")
-    public String showAddTouristPage(@PathVariable Long touristId) {
+    public String showAddTouristPage(@PathVariable Long touristId, Model model) {
         this.touristId = touristId;
 
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
@@ -144,7 +158,17 @@ public class FlightController {
 
         touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
 
-        return "redirect:/flight/manage/" + flightId;
+        boolean hasFreePlace = false;
+
+        if (flightDTO.getTouristList().size() < flightDTO.getAmountOfSeats()) {
+            hasFreePlace = true;
+        }
+
+        model.addAttribute("hasFreePlace", hasFreePlace);
+        model.addAttribute("flight", flightDTO);
+        model.addAttribute("addTouristToFlightSuccessMsg", "Tourist was added successfully.");
+
+        return "flight/manage";
     }
 }
 

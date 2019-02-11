@@ -1,12 +1,9 @@
 package pl.hit.system.core.forms;
 
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 
 public class TouristAddForm {
-
-    private Long id;
 
     @NotEmpty(message = "{firstName.notEmpty}")
     private String firstName;
@@ -19,13 +16,9 @@ public class TouristAddForm {
 
     private String note;
 
-    public Long getId() {
-        return id;
-    }
+    @NotEmpty(message = "{birthDate.notEmpty}")
+    private String birthDate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -57,5 +50,13 @@ public class TouristAddForm {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

@@ -15,7 +15,7 @@
 <body>
 <jsp:include page="../elements/menu.jsp"/>
 <div class="container">
-    <div class="row center"><h2>All Flights</h2>
+    <div class="row center"><h4>All Flights</h4>
         <table>
             <thead>
             <tr>
@@ -41,6 +41,8 @@
         </table>
         </br>
         <td><a href="/flight/add">Add new flight.</a>
+            <h6 style="color:limegreen;">${addFlightSuccessMsg}</h6>
+            <h6 style="color:limegreen;">${deleteFlightSuccessMsg}</h6>
     </div>
 </div>
 </body>

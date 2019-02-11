@@ -25,8 +25,12 @@
                 <f:errors path="country"/> </p>
             <p>Notes: <f:input path="note" type="text"/>
                 <f:errors path="note"/> </p>
-            Birth date:* <input type="date" name="birthDate" required = required> </br>
-            <p><input type="submit" value="Create"/></p> </f:form>
+            <p>Birth date:* <f:input path="birthDate" type="date"/>
+                <f:errors path="birthDate"/> </p>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </f:form>
     </div>
 </div>
 </body>

@@ -26,11 +26,12 @@
                     <option value="yes">Yes, delete.</option>
                     <option value="no">No.</option>
                 </select>
-
             </div>
         </div>
         <fieldset>
-            <input type="submit" value="Submit"/>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
         </fieldset>
     </form>
 </div>
