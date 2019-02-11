@@ -1,13 +1,20 @@
 package pl.hit.system.core.forms;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+
 public class TouristAddForm {
 
     private Long id;
 
+    @NotEmpty(message = "{firstName.notEmpty}")
     private String firstName;
 
+    @NotEmpty(message = "{lastName.notEmpty}")
     private String lastName;
 
+    @NotEmpty(message = "{country.notEmpty}")
     private String country;
 
     private String note;

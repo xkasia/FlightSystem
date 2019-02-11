@@ -45,7 +45,7 @@ public class TouristController {
 
     @PostMapping("/add")
     public String addUser(@Valid @ModelAttribute("tourist") TouristAddForm touristAddForm,
-                          BindingResult bindingResult, String birthDate) {
+                          BindingResult bindingResult, String birthDate, Model model) {
         if (bindingResult.hasErrors()) {
             return "/tourist/add";
         }
@@ -53,7 +53,10 @@ public class TouristController {
                 touristAddForm.getNote(), LocalDate.parse(birthDate));
         touristService.saveTourist(tourist);
 
-        return "redirect:/tourist/show";
+        List<TouristDTO> tourists = touristService.getAllTourists();
+        model.addAttribute("tourists", tourists);
+        model.addAttribute("addTouristSuccessMsg", "Tourist was added successfully.");
+        return "/tourist/show";
     }
 
     @GetMapping("/manage/{touristId:[0-9]+}")
@@ -75,9 +78,13 @@ public class TouristController {
         if (delete.equals("yes")) {
             TouristDTO touristDTO = touristService.getTouristByID(touristId);
             touristService.deleteTourist(touristDTO);
-            return "redirect:/tourist/show";
+
+            List<TouristDTO> tourists = touristService.getAllTourists();
+            model.addAttribute("tourists", tourists);
+            model.addAttribute("deleteTouristSuccessMsg", "Tourist was deleted successfully.");
+            return "tourist/show";
         }
-        return "redirect:/tourists/manage/" + touristId;
+        return "redirect:/tourist/manage/" + touristId;
     }
 
     @GetMapping("/flight/delete/{flightId:[0-9]+}")
@@ -87,13 +94,16 @@ public class TouristController {
     }
 
     @PostMapping("/flight/delete")
-    public String deleteFlight(String delete) {
+    public String deleteFlight(String delete, Model model) {
         if (delete.equals("yes")) {
             TouristDTO touristDTO = touristService.getTouristByID(touristId);
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             touristService.deleteFlight(touristDTO, flightDTO);
+            model.addAttribute("tourist", touristDTO);
+            model.addAttribute("deleteFlightFromTouristSuccessMsg", "Flight was deleted successfully.");
+            return "tourist/manage";
         }
-        return "redirect:/tourists/manage/" + touristId;
+        return "redirect:/tourist/manage/" + touristId;
     }
 
     @GetMapping("/flight/all")
@@ -126,13 +136,16 @@ public class TouristController {
     }
 
     @GetMapping("/flight/add/{flightId:[0-9]+}")
-    public String showAddFlightPage(@PathVariable Long flightId) {
+    public String showAddFlightPage(@PathVariable Long flightId, Model model) {
         this.flightId = flightId;
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
         touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
 
-        return "redirect:/tourist/manage/" + touristId;
+        model.addAttribute("tourist", touristDTO);
+        model.addAttribute("addFlightToTouristSuccessMsg", "Flight was added successfully.");
+
+        return "tourist/manage";
     }
 }

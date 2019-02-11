@@ -23,7 +23,7 @@
                 <f:errors path="lastName"/> </p>
             <p>Country:* <f:input path="country" type="text"/>
                 <f:errors path="country"/> </p>
-            <p>Notes:* <f:input path="note" type="text"/>
+            <p>Notes: <f:input path="note" type="text"/>
                 <f:errors path="note"/> </p>
             Birth date:* <input type="date" name="birthDate" required = required> </br>
             <p><input type="submit" value="Create"/></p> </f:form>

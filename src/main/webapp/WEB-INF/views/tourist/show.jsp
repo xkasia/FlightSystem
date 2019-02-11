@@ -41,6 +41,8 @@
         </table>
         </br>
         <td><a href="/tourist/add">Add new tourist.</a>
+            <h6 style="color:limegreen;">${addTouristSuccessMsg}</h6>
+            <h6 style="color:limegreen;">${deleteTouristSuccessMsg}</h6>
     </div>
 </div>
 </body>

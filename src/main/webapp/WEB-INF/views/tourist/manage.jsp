@@ -52,6 +52,8 @@
         </table>
         <br/>
         <a href="/tourist/flight/all">Add new flight.</a>
+        <h6 style="color:limegreen;">${deleteFlightFromTouristSuccessMsg}</h6>
+        <h6 style="color:limegreen;">${addFlightToTouristSuccessMsg}</h6>
     </div>
 </div>
 </body>
