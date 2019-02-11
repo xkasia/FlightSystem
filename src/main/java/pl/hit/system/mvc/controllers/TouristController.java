@@ -33,7 +33,7 @@ public class TouristController {
     @GetMapping("/show")
     public String showTourists(Model model) {
         List<TouristDTO> tourists = touristService.getAllTourists();
-        model.addAttribute("tourist", tourists);
+        model.addAttribute("tourists", tourists);
         return "/tourist/show";
     }
 
@@ -45,11 +45,10 @@ public class TouristController {
 
     @PostMapping("/add")
     public String addUser(@Valid @ModelAttribute("tourist") TouristAddForm touristAddForm,
-                          BindingResult bindingResult, String birthDate, Model model) {
+                          BindingResult bindingResult, String birthDate) {
         if (bindingResult.hasErrors()) {
             return "/tourist/add";
         }
-
         TouristDTO tourist = new TouristDTO(touristAddForm.getFirstName(), touristAddForm.getLastName(), touristAddForm.getCountry(),
                 touristAddForm.getNote(), LocalDate.parse(birthDate));
         touristService.saveTourist(tourist);
@@ -57,11 +56,10 @@ public class TouristController {
         return "redirect:/tourist/show";
     }
 
-
     @GetMapping("/manage/{touristId:[0-9]+}")
     public String manageTourist(@PathVariable Long touristId, Model model) {
         this.touristId = touristId;
-        TouristDTO touristDTO = touristService.getTouristByID(this.touristId);
+        TouristDTO touristDTO = touristService.getTouristByID(touristId);
         model.addAttribute("tourist", touristDTO);
         return "tourist/manage";
     }
@@ -79,7 +77,7 @@ public class TouristController {
             touristService.deleteTourist(touristDTO);
             return "redirect:/tourist/show";
         }
-        return "redirect:/tourist/manage/" + touristId;
+        return "redirect:/tourists/manage/" + touristId;
     }
 
     @GetMapping("/flight/delete/{flightId:[0-9]+}")
@@ -95,9 +93,8 @@ public class TouristController {
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             touristService.deleteFlight(touristDTO, flightDTO);
         }
-        return "redirect:/tourist/manage/" + touristId;
+        return "redirect:/tourists/manage/" + touristId;
     }
-
 
     @GetMapping("/flight/all")
     public String showAllAvailableFlightsPage(Model model) {
@@ -108,22 +105,20 @@ public class TouristController {
 
         for (int i = 0; i < flightsList.size(); i++) {
             // check if has free places
-            int amountOfBookedSeats = flightService.checkAmountOfBookedSeats(flightsList.get(i));
-            if (amountOfBookedSeats < flightsList.get(i).getAmountOfSeats()) {
+            if (flightsList.get(i).getTouristList().size() < flightsList.get(i).getAmountOfSeats()) {
                 hasFreePlaceMap.put(flightsList.get(i).getId(), true);
             } else {
                 hasFreePlaceMap.put(flightsList.get(i).getId(), false);
             }
 
             // check if already booked
-            boolean isAlreadyBokked = touristService.checkIfTouristBookedFlight(flightsList.get(i).getId(), touristDTO.getId());
-            if (isAlreadyBokked) {
+            boolean isAlreadyBooked = touristService.checkIfTouristBookedFlight(flightsList.get(i).getId(), touristDTO.getId());
+            if (isAlreadyBooked) {
                 isalreadyBookedMap.put(flightsList.get(i).getId(), true);
             } else {
                 isalreadyBookedMap.put(flightsList.get(i).getId(), false);
             }
         }
-
         model.addAttribute("isAlreadyBooked", isalreadyBookedMap);
         model.addAttribute("hasFreePlace", hasFreePlaceMap);
         model.addAttribute("flights", flightsList);
@@ -131,18 +126,12 @@ public class TouristController {
     }
 
     @GetMapping("/flight/add/{flightId:[0-9]+}")
-    public String showAddFlightPage(@PathVariable Long flightId, Model model) {
+    public String showAddFlightPage(@PathVariable Long flightId) {
         this.flightId = flightId;
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
         touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
-
-        return "redirect:/tourist/manage/" + touristId;
-    }
-
-    @PostMapping("/flight/add")
-    public String addFlight() {
 
         return "redirect:/tourist/manage/" + touristId;
     }

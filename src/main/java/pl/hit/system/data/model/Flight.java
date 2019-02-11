@@ -2,6 +2,8 @@ package pl.hit.system.data.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +17,10 @@ public class Flight {
     private Long id;
 
     @Column(name = "departure_time", nullable = false)
-    private Timestamp departureTime;
+    private LocalDateTime departureTime;
 
     @Column(name = "arrival_Time", nullable = false)
-    private Timestamp arrivalTime;
+    private LocalDateTime arrivalTime;
 
     @Column(name = "amount_of_seats", nullable = false)
     Integer amountOfSeats;
@@ -43,19 +45,19 @@ public class Flight {
         this.id = id;
     }
 
-    public Timestamp getDepartureTime() {
+    public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(Timestamp departureTime) {
+    public void setDepartureTime(LocalDateTime departureTime) {
         this.departureTime = departureTime;
     }
 
-    public Timestamp getArrivalTime() {
+    public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Timestamp arrivalTime) {
+    public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 

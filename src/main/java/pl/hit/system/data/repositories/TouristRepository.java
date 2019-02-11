@@ -34,7 +34,6 @@ public interface TouristRepository extends JpaRepository<Tourist, Long> {
                     "values(?1, ?2)")
     void saveTouristFlight(Long flightId, Long touristId);
 
-
     @Query(nativeQuery = true, value =
             "SELECT count(*) from tourist_flights where flight_id = ?1 and Tourist_ID = ?2")
     int getAmountOfPlecesBookedbyTouristInSpecifiedFlight(Long flightId, Long touristId);

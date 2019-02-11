@@ -15,7 +15,7 @@
 <jsp:include page="../elements/menu.jsp"/>
 <div class="container">
     <div class="row center">
-        <h3>Please fill in this form to create new tourist account.</h3>
+        <h5>Please fill in this form to create a new tourist account.</h5>
         <f:form modelAttribute="tourist" method="post" action="/tourist/add">
             <p>First name:*<f:input path="firstName" type="text"/>
                 <f:errors path="firstName"/> </p>

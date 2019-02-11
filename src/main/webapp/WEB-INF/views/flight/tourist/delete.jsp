@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Katarzyna
-  Date: 09.02.2019
-  Time: 17:51
+  Date: 10.02.2019
+  Time: 20:25
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page isELIgnored="false" %>
@@ -15,9 +15,9 @@
 <body>
 <jsp:include page="../../elements/menu.jsp"/>
 <div>
-    <form method="post" action="/tourist/flight/delete">
+    <form method="post" action="/flight/tourist/delete">
         <div>
-            <p>Are you sure, that you want to delete flight from choosed tourist?</p>
+            <p>Are you sure, that you want to delete tourist from choosed flight?</p>
             <div class="input-field s6">
                 <select class="browser-default waves-effect waves-light btn"
                         required="required" name="delete" id="delete">=
@@ -36,3 +36,4 @@
 </div>
 </body>
 </html>
+

@@ -3,6 +3,7 @@ package pl.hit.system.core.services;
 
 import org.springframework.stereotype.Service;
 import pl.hit.system.data.model.Flight;
+import pl.hit.system.data.model.Tourist;
 import pl.hit.system.data.repositories.FlightRepository;
 import pl.hit.system.dto.FlightDTO;
 
@@ -55,12 +56,31 @@ public class FlightService {
         return flightsDTO;
     }
 
-    public int checkAmountOfBookedSeats(FlightDTO flightDTO) {
+    public void saveFlight(FlightDTO flightDTO) {
+
+        Flight flight = new Flight();
+        flight.setDepartureTime(flightDTO.getDepartureTime());
+        flight.setArrivalTime(flightDTO.getArrivalTime());
+        flight.setAmountOfSeats(flightDTO.getAmountOfSeats());
+        flight.setTicketPrice(flightDTO.getTicketPrice());
+
+        flightRepository.saveFlight(flight.getDepartureTime(),
+                flight.getArrivalTime(), flight.getAmountOfSeats(), flight.getTicketPrice());
+
+    }
+
+    public void deleteFlight(FlightDTO flightDTO) {
 
         Flight flight = flightRepository.getFlightById(flightDTO.getId());
 
-        int amountOfTourists = flightRepository.getAmountOfTourists(flight.getId());
+        if(flight.getTouristList()!= null){
+            List<Tourist> flightsTourists = flight.getTouristList();
+            for (int i = 0; i <flightsTourists.size() ; i++) {
+                flightRepository.deleteTouristsByTouristId(flightsTourists.get(i).getId());
+            }
+            flight.setTouristList(null);
+        }
 
-        return amountOfTourists;
+        flightRepository.deleteFlightById(flight.getId());
     }
 }

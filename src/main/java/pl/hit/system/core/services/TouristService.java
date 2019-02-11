@@ -97,7 +97,6 @@ public class TouristService {
     public void saveTourist(TouristDTO touristDTO) {
 
         Tourist tourist = new Tourist();
-        tourist.setId(touristDTO.getId());
         tourist.setFirstName(touristDTO.getFirstName());
         tourist.setLastName(touristDTO.getLastName());
         tourist.setCountry(touristDTO.getCountry());

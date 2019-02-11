@@ -2,7 +2,7 @@ package pl.hit.system.dto;
 
 import pl.hit.system.data.model.Tourist;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +11,9 @@ public class FlightDTO {
 
     private Long id;
 
-    private Timestamp departureTime;
+    private LocalDateTime departureTime;
 
-    private Timestamp arrivalTime;
+    private LocalDateTime arrivalTime;
 
     Integer amountOfSeats;
 
@@ -40,19 +40,19 @@ public class FlightDTO {
         this.id = id;
     }
 
-    public Timestamp getDepartureTime() {
+    public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(Timestamp departureTime) {
+    public void setDepartureTime(LocalDateTime departureTime) {
         this.departureTime = departureTime;
     }
 
-    public Timestamp getArrivalTime() {
+    public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Timestamp arrivalTime) {
+    public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
