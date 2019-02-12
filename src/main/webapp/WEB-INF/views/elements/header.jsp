@@ -1,21 +1,16 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!-- Compiled and minified CSS -->
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-<%--material icons--%>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('select').material_select();
-    });
-</script>
-
-
+<header>
+    <div class="navbar-fixed">
+        <nav class="light-blue">
+            <div class="nav-wrapper container" role="navigation">
+                <a href="#" class="brand-logo right"><i
+                        class="large material-icons">airplanemode_active</i></a>
+                <ul class="left hide-on-med-and-down">
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/home/about">About System</a></li>
+                    <li><a href="/flight/show">Flights Management</a></li>
+                    <li><a href="/tourist/show">Tourists Management</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

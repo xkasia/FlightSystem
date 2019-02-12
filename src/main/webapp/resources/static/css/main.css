@@ -1,0 +1,50 @@
+
+body {
+    height: 100%;
+    margin: 0;
+    display: table;
+    width: 100%;
+}
+
+main {
+    padding-top: 30px;
+}
+
+header {
+    height: 50px;
+}
+
+footer {
+    height: 50px;
+    display: table-row;
+}
+
+.success {
+    color: #009688;
+}
+
+.failure {
+    color: #e57373;
+}
+
+.page-footer {
+    background-color: #00b0ff;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about {
+    width: 60%;
+    margin-left: 20%;
+    align-content: center;
+    text-align: left;
+}
+
+.info {
+    width: 60%;
+    text-align: center;
+    align-content: center;
+    margin-left: 20%;
+    word-wrap: break-word;
+}

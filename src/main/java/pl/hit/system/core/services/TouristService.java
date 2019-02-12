@@ -17,7 +17,8 @@ public class TouristService {
     private TouristRepository touristRepository;
     private FlightRepository flightRepository;
 
-    public TouristService(TouristRepository touristRepository, FlightRepository flightRepository) {
+    public TouristService(TouristRepository touristRepository,
+                          FlightRepository flightRepository) {
         this.touristRepository = touristRepository;
         this.flightRepository = flightRepository;
     }
@@ -30,6 +31,7 @@ public class TouristService {
                     touristDTO.setId(tourist.getId());
                     touristDTO.setFirstName(tourist.getFirstName());
                     touristDTO.setLastName(tourist.getLastName());
+                    touristDTO.setGender(tourist.isMale());
                     touristDTO.setCountry(tourist.getCountry());
                     touristDTO.setBirthDate(tourist.getBirthDate());
                     return touristDTO;
@@ -46,6 +48,7 @@ public class TouristService {
             touristDTO.setId(tourist.getId());
             touristDTO.setFirstName(tourist.getFirstName());
             touristDTO.setLastName(tourist.getLastName());
+            touristDTO.setGender(tourist.isMale());
             touristDTO.setCountry(tourist.getCountry());
             touristDTO.setNote(tourist.getNote());
             touristDTO.setFlightsList(tourist.getFlightsList());
@@ -86,7 +89,8 @@ public class TouristService {
         Tourist tourist = touristRepository.getTouristById(touristId);
         Flight flight = flightRepository.getFlightById(flightId);
 
-        int amountOfBookedPlaces = touristRepository.getAmountOfPlecesBookedbyTouristInSpecifiedFlight(flight.getId(), tourist.getId());
+        int amountOfBookedPlaces =
+                touristRepository.getAmountOfPlecesBookedbyTouristInSpecifiedFlight(flight.getId(), tourist.getId());
 
         if (amountOfBookedPlaces == 1) {
             return true;
@@ -99,11 +103,13 @@ public class TouristService {
         Tourist tourist = new Tourist();
         tourist.setFirstName(touristDTO.getFirstName());
         tourist.setLastName(touristDTO.getLastName());
+        tourist.setGender(tourist.isMale());
         tourist.setCountry(touristDTO.getCountry());
         tourist.setNote(touristDTO.getNote());
         tourist.setBirthDate(touristDTO.getBirthDate());
 
-        touristRepository.saveTourist(tourist.getFirstName(), tourist.getLastName(), tourist.getCountry(),
+        touristRepository.saveTourist(tourist.getFirstName(),
+                tourist.getLastName(), tourist.isMale(), tourist.getCountry(),
                 tourist.getNote(), tourist.getBirthDate());
     }
 }

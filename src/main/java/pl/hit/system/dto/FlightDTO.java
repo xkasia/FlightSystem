@@ -15,11 +15,11 @@ public class FlightDTO {
 
     private LocalDateTime arrivalTime;
 
-    Integer amountOfSeats;
+    private Integer amountOfSeats;
 
-    List<Tourist> touristList = new ArrayList<>();
+    private List<Tourist> touristList = new ArrayList<>();
 
-    Double ticketPrice;
+    private Double ticketPrice;
 
     public FlightDTO() {
     }
@@ -70,6 +70,18 @@ public class FlightDTO {
 
     public void setTicketPrice(Double ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightDTO{" +
+                "id=" + id +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", amountOfSeats=" + amountOfSeats +
+                ", touristList=" + touristList +
+                ", ticketPrice=" + ticketPrice +
+                '}';
     }
 
     @Override

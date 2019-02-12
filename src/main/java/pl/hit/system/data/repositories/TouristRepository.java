@@ -21,11 +21,13 @@ public interface TouristRepository extends JpaRepository<Tourist, Long> {
     void deleteTouristById(Long id);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tourist_flights WHERE flight_id = ?1")
+    @Query(nativeQuery = true, value = "DELETE FROM tourist_flights" +
+            " WHERE flight_id = ?1")
     void deleteFlightsByFlightId(Long flightId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tourist_flights WHERE flight_id = ?1 and tourist_id = ?2")
+    @Query(nativeQuery = true, value = "DELETE FROM tourist_flights WHERE " +
+            "flight_id = ?1 and tourist_id = ?2")
     void deleteFlight(Long flightId, Long touristId);
 
     @Modifying
@@ -35,12 +37,15 @@ public interface TouristRepository extends JpaRepository<Tourist, Long> {
     void saveTouristFlight(Long flightId, Long touristId);
 
     @Query(nativeQuery = true, value =
-            "SELECT count(*) from tourist_flights where flight_id = ?1 and Tourist_ID = ?2")
+            "SELECT count(*) from tourist_flights" +
+                    " where flight_id = ?1 and Tourist_ID = ?2")
     int getAmountOfPlecesBookedbyTouristInSpecifiedFlight(Long flightId, Long touristId);
 
     @Modifying
     @Query(nativeQuery = true, value =
-            "Insert into tourists(first_name, last_name, country, note, birth_date) VALUES(?1, ?2, ?3, ?4, ?5 )")
-    void saveTourist(String firstName, String lastName, String country, String note, LocalDate birthDate);
+            "Insert into tourists(first_name, last_name, gender, country, note, birth_date) " +
+                    "VALUES(?1, ?2, ?3, ?4, ?5, ?6 )")
+    void saveTourist(String firstName, String lastName, Boolean gender, String country,
+                     String note, LocalDate birthDate);
 }
 

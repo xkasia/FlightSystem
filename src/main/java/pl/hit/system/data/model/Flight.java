@@ -21,16 +21,16 @@ public class Flight {
     private LocalDateTime arrivalTime;
 
     @Column(name = "amount_of_seats", nullable = false)
-    Integer amountOfSeats;
+    private Integer amountOfSeats;
 
     @ManyToMany
     @JoinTable(name = "tourist_flights",
             joinColumns = @JoinColumn(name = "Flight_ID"),
             inverseJoinColumns = @JoinColumn(name = "Tourist_ID"))
-    List<Tourist> touristList = new ArrayList<>();
+    private List<Tourist> touristList = new ArrayList<>();
 
     @Column(name = "ticket_price", nullable = false)
-    Double ticketPrice;
+    private Double ticketPrice;
 
     public Flight() {
     }
@@ -81,6 +81,18 @@ public class Flight {
 
     public void setTouristList(List<Tourist> touristList) {
         this.touristList = touristList;
+    }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "id=" + id +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", amountOfSeats=" + amountOfSeats +
+                ", touristList=" + touristList +
+                ", ticketPrice=" + ticketPrice +
+                '}';
     }
 
     @Override

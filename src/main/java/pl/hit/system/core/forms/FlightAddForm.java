@@ -3,6 +3,7 @@ package pl.hit.system.core.forms;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class FlightAddForm {
 
@@ -14,29 +15,21 @@ public class FlightAddForm {
 
     @NotNull(message = "{amountOfSeats.notEmpty}")
     @Min(value = 0, message = ("{amountOfSeats.min}"))
-    Integer amountOfSeats;
+    private Integer amountOfSeats;
 
     @NotNull(message = "{ticketPrice.notEmpty}")
     @Min(value = 0, message = ("{ticketPrice.min}"))
-    Double ticketPrice;
+    private BigDecimal ticketPrice;
 
     public FlightAddForm() {
     }
 
-    public Integer getAmountOfSeats() {
-        return amountOfSeats;
+    public String getDepartureTime() {
+        return departureTime;
     }
 
-    public void setAmountOfSeats(Integer amountOfSeats) {
-        this.amountOfSeats = amountOfSeats;
-    }
-
-    public Double getTicketPrice() {
-        return ticketPrice;
-    }
-
-    public void setTicketPrice(Double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
     }
 
     public String getArrivalTime() {
@@ -47,11 +40,29 @@ public class FlightAddForm {
         this.arrivalTime = arrivalTime;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    public Integer getAmountOfSeats() {
+        return amountOfSeats;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setAmountOfSeats(Integer amountOfSeats) {
+        this.amountOfSeats = amountOfSeats;
+    }
+
+    public BigDecimal getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(BigDecimal ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightAddForm{" +
+                "departureTime='" + departureTime + '\'' +
+                ", arrivalTime='" + arrivalTime + '\'' +
+                ", amountOfSeats=" + amountOfSeats +
+                ", ticketPrice=" + ticketPrice +
+                '}';
     }
 }

@@ -20,12 +20,13 @@ import java.util.Map;
 @RequestMapping("/flight")
 public class FlightController {
 
-    TouristService touristService;
-    FlightService flightService;
+    private TouristService touristService;
+    private FlightService flightService;
     private Long touristId;
     private Long flightId;
 
-    public FlightController(TouristService touristService, FlightService flightService) {
+    public FlightController(TouristService touristService,
+                            FlightService flightService) {
         this.touristService = touristService;
         this.flightService = flightService;
     }
@@ -50,21 +51,23 @@ public class FlightController {
             return "flight/add";
         }
 
-        if(LocalDateTime.parse(flightAddForm.getDepartureTime()).compareTo(LocalDateTime.parse(flightAddForm.getArrivalTime()))>0){
-            model.addAttribute("wrongDataMsg", "Arrival time can not be before departure time. Please provide proper data.");
-            return  "flight/add";
+        if (LocalDateTime.parse(flightAddForm.getDepartureTime()).compareTo(LocalDateTime.parse(flightAddForm.getArrivalTime())) > 0) {
+            model.addAttribute("wrongDataMsg",
+                    "Arrival time can not be before departure time. Please provide proper data.");
+            return "flight/add";
         }
 
         FlightDTO flightDTO = new FlightDTO();
         flightDTO.setDepartureTime(LocalDateTime.parse(flightAddForm.getDepartureTime()));
         flightDTO.setArrivalTime(LocalDateTime.parse(flightAddForm.getArrivalTime()));
         flightDTO.setAmountOfSeats(flightAddForm.getAmountOfSeats());
-        flightDTO.setTicketPrice(flightAddForm.getTicketPrice());
+        flightDTO.setTicketPrice(flightAddForm.getTicketPrice().doubleValue());
         flightService.saveFlight(flightDTO);
 
         List<FlightDTO> flights = flightService.getAllFlights();
         model.addAttribute("flights", flights);
-        model.addAttribute("addFlightSuccessMsg", "Flight was added successfully.");
+        model.addAttribute("addFlightSuccessMsg",
+                "Flight was added successfully.");
 
         return "flight/show";
     }
@@ -74,15 +77,14 @@ public class FlightController {
         this.flightId = flightId;
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
-        boolean hasFreePlace = false;
-
-        if (flightDTO.getTouristList().size() < flightDTO.getAmountOfSeats()) {
-            hasFreePlace = true;
-        }
-
-        model.addAttribute("hasFreePlace", hasFreePlace);
+        model.addAttribute("hasFreePlace", hasFreePlace(flightDTO));
         model.addAttribute("flight", flightDTO);
         return "flight/manage";
+    }
+
+    private boolean hasFreePlace(FlightDTO flightDTO) {
+        int amountOfTourists = flightService.getAmountOfTourists(flightDTO);
+        return (amountOfTourists < flightDTO.getAmountOfSeats());
     }
 
     @GetMapping("/delete")
@@ -99,7 +101,8 @@ public class FlightController {
 
             List<FlightDTO> flights = flightService.getAllFlights();
             model.addAttribute("flights", flights);
-            model.addAttribute("deleteFlightSuccessMsg", "Flight was deleted successfully.");
+            model.addAttribute("deleteFlightSuccessMsg",
+                    "Flight was deleted successfully.");
             return "flight/show";
         }
         return "redirect:/flight/manage/" + flightId;
@@ -118,8 +121,10 @@ public class FlightController {
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             touristService.deleteFlight(touristDTO, flightDTO);
 
+            model.addAttribute("hasFreePlace", hasFreePlace(flightDTO));
             model.addAttribute("flight", flightDTO);
-            model.addAttribute("deleteTouristFromFlightSuccessMsg", "Flight was deleted successfully.");
+            model.addAttribute("deleteTouristFromFlightSuccessMsg",
+                    "Flight was deleted successfully.");
             return "flight/manage";
         }
         return "redirect:/flight/manage/" + touristId;
@@ -135,14 +140,12 @@ public class FlightController {
 
         for (int i = 0; i < touristList.size(); i++) {
             // check if already booked
-            boolean isAlreadyBooked = touristService.checkIfTouristBookedFlight(flightDTO.getId(), touristList.get(i).getId());
-            if (isAlreadyBooked) {
-                isAlreadyBookedMap.put(touristList.get(i).getId(), true);
-            } else {
-                isAlreadyBookedMap.put(touristList.get(i).getId(), false);
-            }
+            boolean isAlreadyBooked = touristService.checkIfTouristBookedFlight(flightDTO.getId(),
+                    touristList.get(i).getId());
+            isAlreadyBookedMap.put(touristList.get(i).getId(), isAlreadyBooked);
         }
 
+        model.addAttribute("flight", flightDTO);
         model.addAttribute("isAlreadyBooked", isAlreadyBookedMap);
         model.addAttribute("tourists", touristList);
         return "/flight/tourist/all";
@@ -156,17 +159,17 @@ public class FlightController {
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
-        touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
-
-        boolean hasFreePlace = false;
-
-        if (flightDTO.getTouristList().size() < flightDTO.getAmountOfSeats()) {
-            hasFreePlace = true;
+        if (touristService.checkIfTouristBookedFlight(flightDTO.getId(),
+                touristDTO.getId())) {
+            return "redirect:/flight/tourist/all";
         }
 
-        model.addAttribute("hasFreePlace", hasFreePlace);
+        touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
+
+        model.addAttribute("hasFreePlace", hasFreePlace(flightDTO));
         model.addAttribute("flight", flightDTO);
-        model.addAttribute("addTouristToFlightSuccessMsg", "Tourist was added successfully.");
+        model.addAttribute("addTouristToFlightSuccessMsg",
+                "Tourist was added successfully.");
 
         return "flight/manage";
     }

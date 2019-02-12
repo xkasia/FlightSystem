@@ -16,6 +16,8 @@ public class TouristDTO {
 
     private String lastName;
 
+    private Boolean gender;
+
     private String country;
 
     private String note;
@@ -29,14 +31,6 @@ public class TouristDTO {
 
     public Long getId() {
         return id;
-    }
-
-    public TouristDTO(String firstName, String lastName, String country, String note, LocalDate birthDate) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.country = country;
-        this.note = note;
-        this.birthDate = birthDate;
     }
 
     public void setId(Long id) {
@@ -57,6 +51,14 @@ public class TouristDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Boolean isMale() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
     }
 
     public String getCountry() {
@@ -89,6 +91,20 @@ public class TouristDTO {
 
     public void setFlightsList(List<Flight> flightsList) {
         this.flightsList = flightsList;
+    }
+
+    @Override
+    public String toString() {
+        return "TouristDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", country='" + country + '\'' +
+                ", note='" + note + '\'' +
+                ", birthDate=" + birthDate +
+                ", flightsList=" + flightsList +
+                '}';
     }
 
     @Override

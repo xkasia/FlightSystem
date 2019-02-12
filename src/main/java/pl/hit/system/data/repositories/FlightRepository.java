@@ -15,11 +15,12 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     Flight getFlightById(Long flightId);
 
-
     @Modifying
     @Query(nativeQuery = true, value =
-            "Insert into flights(departure_time, arrival_Time, amount_of_seats, ticket_price) VALUES(?1, ?2, ?3, ?4)")
-    void saveFlight(LocalDateTime departureTime, LocalDateTime arrivalTime, Integer amountOfSeats, Double ticketPrice);
+            "Insert into flights(departure_time, arrival_Time, amount_of_seats, " +
+                    "ticket_price) VALUES(?1, ?2, ?3, ?4)")
+    void saveFlight(LocalDateTime departureTime, LocalDateTime arrivalTime,
+                    Integer amountOfSeats, Double ticketPrice);
 
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM tourist_flights WHERE tourist_id = ?1")
@@ -28,4 +29,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM flights WHERE id = ?1")
     void deleteFlightById(Long flightId);
+
+    @Query(nativeQuery = true, value =
+            "SELECT count(*) from tourist_flights where flight_id = ?1")
+    int getAmountOfTourists(Long flightId);
 }

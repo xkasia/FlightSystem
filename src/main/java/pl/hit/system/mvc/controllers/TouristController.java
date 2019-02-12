@@ -25,7 +25,8 @@ public class TouristController {
     private Long touristId;
     private Long flightId;
 
-    public TouristController(TouristService touristService, FlightService flightService) {
+    public TouristController(TouristService touristService,
+                             FlightService flightService) {
         this.touristService = touristService;
         this.flightService = flightService;
     }
@@ -44,18 +45,26 @@ public class TouristController {
     }
 
     @PostMapping("/add")
-    public String addUser(@Valid @ModelAttribute("tourist") TouristAddForm touristAddForm,
-                          BindingResult bindingResult, Model model) {
+    public String addTourist(@Valid @ModelAttribute("tourist") TouristAddForm touristAddForm,
+                             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "/tourist/add";
         }
-        TouristDTO tourist = new TouristDTO(touristAddForm.getFirstName(), touristAddForm.getLastName(), touristAddForm.getCountry(),
-                touristAddForm.getNote(), LocalDate.parse(touristAddForm.getBirthDate()));
+
+        TouristDTO tourist = new TouristDTO();
+        tourist.setFirstName(touristAddForm.getFirstName());
+        tourist.setLastName(touristAddForm.getLastName());
+        tourist.setGender(touristAddForm.isMale());
+        tourist.setCountry(touristAddForm.getCountry());
+        tourist.setNote(touristAddForm.getNote());
+        tourist.setBirthDate(LocalDate.parse(touristAddForm.getBirthDate()));
+
         touristService.saveTourist(tourist);
 
         List<TouristDTO> tourists = touristService.getAllTourists();
         model.addAttribute("tourists", tourists);
-        model.addAttribute("addTouristSuccessMsg", "Tourist was added successfully.");
+        model.addAttribute("addTouristSuccessMsg",
+                "Tourist was added successfully.");
         return "/tourist/show";
     }
 
@@ -81,7 +90,8 @@ public class TouristController {
 
             List<TouristDTO> tourists = touristService.getAllTourists();
             model.addAttribute("tourists", tourists);
-            model.addAttribute("deleteTouristSuccessMsg", "Tourist was deleted successfully.");
+            model.addAttribute("deleteTouristSuccessMsg",
+                    "Tourist was deleted successfully.");
             return "tourist/show";
         }
         return "redirect:/tourist/manage/" + touristId;
@@ -100,7 +110,8 @@ public class TouristController {
             FlightDTO flightDTO = flightService.getFlightById(flightId);
             touristService.deleteFlight(touristDTO, flightDTO);
             model.addAttribute("tourist", touristDTO);
-            model.addAttribute("deleteFlightFromTouristSuccessMsg", "Flight was deleted successfully.");
+            model.addAttribute("deleteFlightFromTouristSuccessMsg",
+                    "Flight was deleted successfully.");
             return "tourist/manage";
         }
         return "redirect:/tourist/manage/" + touristId;
@@ -111,28 +122,31 @@ public class TouristController {
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
         List<FlightDTO> flightsList = flightService.getAllFlights();
         Map<Long, Boolean> hasFreePlaceMap = new HashMap<>();
-        Map<Long, Boolean> isalreadyBookedMap = new HashMap<>();
+        Map<Long, Boolean> isAlreadyBookedMap = new HashMap<>();
 
         for (int i = 0; i < flightsList.size(); i++) {
             // check if has free places
-            if (flightsList.get(i).getTouristList().size() < flightsList.get(i).getAmountOfSeats()) {
-                hasFreePlaceMap.put(flightsList.get(i).getId(), true);
-            } else {
-                hasFreePlaceMap.put(flightsList.get(i).getId(), false);
-            }
+            hasFreePlaceMap.put(flightsList.get(i).getId(),
+                    hasFreePlace(flightsList.get(i)));
 
             // check if already booked
-            boolean isAlreadyBooked = touristService.checkIfTouristBookedFlight(flightsList.get(i).getId(), touristDTO.getId());
-            if (isAlreadyBooked) {
-                isalreadyBookedMap.put(flightsList.get(i).getId(), true);
-            } else {
-                isalreadyBookedMap.put(flightsList.get(i).getId(), false);
-            }
+            boolean isAlreadyBooked =
+                    touristService.checkIfTouristBookedFlight(flightsList.get(i).getId(),
+                            touristDTO.getId());
+            isAlreadyBookedMap.put(flightsList.get(i).getId(), isAlreadyBooked);
+
         }
-        model.addAttribute("isAlreadyBooked", isalreadyBookedMap);
+
+        model.addAttribute("tourist", touristDTO);
+        model.addAttribute("isAlreadyBooked", isAlreadyBookedMap);
         model.addAttribute("hasFreePlace", hasFreePlaceMap);
         model.addAttribute("flights", flightsList);
         return "/tourist/flight/all";
+    }
+
+    private boolean hasFreePlace(FlightDTO flightDTO) {
+        int amountOfTourists = flightService.getAmountOfTourists(flightDTO);
+        return (amountOfTourists < flightDTO.getAmountOfSeats());
     }
 
     @GetMapping("/flight/add/{flightId:[0-9]+}")
@@ -141,10 +155,16 @@ public class TouristController {
         TouristDTO touristDTO = touristService.getTouristByID(touristId);
         FlightDTO flightDTO = flightService.getFlightById(flightId);
 
+        if (touristService.checkIfTouristBookedFlight(flightDTO.getId(),
+                touristDTO.getId())) {
+            return "redirect:/tourist/flight/all";
+        }
+
         touristService.addTouristFlight(flightDTO.getId(), touristDTO.getId());
 
         model.addAttribute("tourist", touristDTO);
-        model.addAttribute("addFlightToTouristSuccessMsg", "Flight was added successfully.");
+        model.addAttribute("addFlightToTouristSuccessMsg",
+                "Flight was added successfully.");
 
         return "tourist/manage";
     }

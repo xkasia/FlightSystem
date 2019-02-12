@@ -20,9 +20,14 @@ public class Tourist {
     @Column(nullable = false, name = "last_name", length = 100, columnDefinition = "VARCHAR")
     private String lastName;
 
+    // male = true
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean gender;
+
     @Column(nullable = false, length = 100, columnDefinition = "VARCHAR")
     private String country;
 
+    @Column(columnDefinition = "TEXT")
     private String note;
 
     @Column(name = "birth_date", nullable = false)
@@ -53,6 +58,14 @@ public class Tourist {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Boolean isMale() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
     }
 
     public String getCountry() {
@@ -88,6 +101,20 @@ public class Tourist {
     }
 
     @Override
+    public String toString() {
+        return "Tourist{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", country='" + country + '\'' +
+                ", note='" + note + '\'' +
+                ", birthDate=" + birthDate +
+                ", flightsList=" + flightsList +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -100,6 +127,4 @@ public class Tourist {
 
         return Objects.hash(id);
     }
-
-
 }
